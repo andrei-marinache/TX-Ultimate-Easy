@@ -220,11 +220,11 @@ script:
 
           // Model configuration
           ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Model format (selected): %s",
-                          sl_tx_model_format->state.c_str());
+                          sl_tx_model_format->current_option());
           ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Model format (detected): %s",
                           id(is_us_model) ? "US" : "EU");
           ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Gangs (selected): %s",
-                          sl_tx_model_gang->state.c_str());
+                          sl_tx_model_gang->current_option());
           ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Gangs (detected): %" PRIu8 "-Gang%s",
                           id(gang_count), id(gang_count) > 1 ? "s" : "");
 
