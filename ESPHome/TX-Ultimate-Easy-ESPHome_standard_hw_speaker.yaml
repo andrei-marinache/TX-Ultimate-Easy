@@ -32,7 +32,7 @@ api:
       then:
         - lambda: |-
             rtttl_speaker->stop();
-            if (speaker_volume->current_option() > 0) {
+            if (speaker_volume->state > 0) {
               ESP_LOGI("${TAG_STD_HW_SPEAKER}", "Play tone: '%s'", tone.c_str());
               rtttl_speaker->play(tone.c_str());
             }

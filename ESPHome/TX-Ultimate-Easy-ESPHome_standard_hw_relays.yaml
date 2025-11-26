@@ -843,7 +843,7 @@ script:
     mode: restart
     then:
       - lambda: |-
-          const bool set_internal = not sw_expose_relays_leds_to_ha->current_option();
+          const bool set_internal = not sw_expose_relays_leds_to_ha->state;
 
           // EU model LEDs
           // EU model - 1 Gang
@@ -943,9 +943,9 @@ script:
             return;
 
           // Ignore if other touch events are active
-          if (bs_multi_touch->current_option() ||
-              bs_swipe_left->current_option() ||
-              bs_swipe_down->current_option() ||
+          if (bs_multi_touch->state ||
+              bs_swipe_left->state ||
+              bs_swipe_down->state ||
               bs_swipe_right->state) {
             return;
           }
@@ -966,28 +966,28 @@ script:
           }
           switch (button) {
             case ${BUTTON_1_ID}:
-              select_state = sl_button_1_action->current_option();
+              select_state = sl_button_1_action->state;
               toggle_relay = (select_state == "${BUTTON_1_ACTION_TEXT}" or
                               (api_disconnected and select_state == "${BUTTON_1_ACTION_FAILSAFE_TEXT}"));
               if (toggle_relay)
                 sw_relay_1->toggle();
               break;
             case ${BUTTON_2_ID}:
-              select_state = sl_button_2_action->current_option();
+              select_state = sl_button_2_action->state;
               toggle_relay = (select_state == "${BUTTON_2_ACTION_TEXT}" or
                               (api_disconnected and select_state == "${BUTTON_2_ACTION_FAILSAFE_TEXT}"));
               if (toggle_relay)
                 sw_relay_2->toggle();
               break;
             case ${BUTTON_3_ID}:
-              select_state = sl_button_3_action->current_option();
+              select_state = sl_button_3_action->state;
               toggle_relay = (select_state == "${BUTTON_3_ACTION_TEXT}" or
                               (api_disconnected and select_state == "${BUTTON_3_ACTION_FAILSAFE_TEXT}"));
               if (toggle_relay)
                 sw_relay_3->toggle();
               break;
             case ${BUTTON_4_ID}:
-              select_state = sl_button_4_action->current_option();
+              select_state = sl_button_4_action->state;
               toggle_relay = (select_state == "${BUTTON_4_ACTION_TEXT}" or
                               (api_disconnected and select_state == "${BUTTON_4_ACTION_FAILSAFE_TEXT}"));
               if (toggle_relay)
@@ -1025,13 +1025,13 @@ script:
           // Relay's states
           ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "Relay%s state%s:", gang_count_plural_suffix.c_str(),
                                                                     gang_count_plural_suffix.c_str());
-          ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 1: %s", sw_relay_1->current_option() ? "ON" : "OFF");
+          ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 1: %s", sw_relay_1->state ? "ON" : "OFF");
           if (id(gang_count) >= 2)
-            ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 2: %s", sw_relay_2->current_option() ? "ON" : "OFF");
+            ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 2: %s", sw_relay_2->state ? "ON" : "OFF");
           if (id(gang_count) >= 3)
-            ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 3: %s", sw_relay_3->current_option() ? "ON" : "OFF");
+            ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 3: %s", sw_relay_3->state ? "ON" : "OFF");
           if (id(gang_count) >= 4)
-            ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 4: %s", sw_relay_4->current_option() ? "ON" : "OFF");
+            ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 4: %s", sw_relay_4->state ? "ON" : "OFF");
           ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "Expose Relay's LEDs to Home Assistant: %s",
                                                 YESNO(sw_expose_relays_leds_to_ha->state));
 
@@ -1306,25 +1306,25 @@ script:
                 relay_state = id(sw_relay_1).state;
                 light_mode = id(is_us_model)
                               ? id(sl_relay_1_light_mode_us)->state
-                              : id(sl_relay_1_light_mode_eu)->current_option();
+                              : id(sl_relay_1_light_mode_eu)->state;
                 break;
               case 1:
                 relay_state = id(sw_relay_2).state;
                 light_mode = id(is_us_model)
                               ? id(sl_relay_2_light_mode_us)->state
-                              : id(sl_relay_2_light_mode_eu)->current_option();
+                              : id(sl_relay_2_light_mode_eu)->state;
                 break;
               case 2:
                 relay_state = id(sw_relay_3).state;
                 light_mode = id(is_us_model)
                               ? id(sl_relay_3_light_mode_us)->state
-                              : id(sl_relay_3_light_mode_eu)->current_option();
+                              : id(sl_relay_3_light_mode_eu)->state;
                 break;
               case 3:
                 relay_state = id(sw_relay_4).state;
                 light_mode = id(is_us_model)
                               ? id(sl_relay_4_light_mode_us)->state
-                              : id(sl_relay_4_light_mode_eu)->current_option();
+                              : id(sl_relay_4_light_mode_eu)->state;
                 break;
             }
 
