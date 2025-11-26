@@ -419,19 +419,19 @@ tx_ultimate_easy:
             domain: touch
             type: swipe
             action: !lambda |-
-              if (sl_tx_model_format->state == "${TX_MODEL_FORMAT_EU_TEXT}")
+              if (sl_tx_model_format->current_option() == "${TX_MODEL_FORMAT_EU_TEXT}")
                 return "left";
               else
                 return "down";
             swipe-direction: !lambda |-
-              if (sl_tx_model_format->state == "${TX_MODEL_FORMAT_EU_TEXT}")
+              if (sl_tx_model_format->current_option() == "${TX_MODEL_FORMAT_EU_TEXT}")
                 return "left";
               else
                 return "down";
             position: !lambda return std::to_string(touch.x);
       - lambda: |-
           ESP_LOGI("${TAG_CORE_HW_TOUCH}", "Swipe %s",
-                    (sl_tx_model_format->state == "${TX_MODEL_FORMAT_EU_TEXT}") ? "left" : "down");
+                    (sl_tx_model_format->current_option() == "${TX_MODEL_FORMAT_EU_TEXT}") ? "left" : "down");
           touch_swipe_left->execute();
 
   on_swipe_right:
@@ -444,19 +444,19 @@ tx_ultimate_easy:
             domain: touch
             type: swipe
             action: !lambda |-
-              if (sl_tx_model_format->state == "${TX_MODEL_FORMAT_EU_TEXT}")
+              if (sl_tx_model_format->current_option() == "${TX_MODEL_FORMAT_EU_TEXT}")
                 return "right";
               else
                 return "up";
             swipe-direction: !lambda |-
-              if (sl_tx_model_format->state == "${TX_MODEL_FORMAT_EU_TEXT}")
+              if (sl_tx_model_format->current_option() == "${TX_MODEL_FORMAT_EU_TEXT}")
                 return "right";
               else
                 return "up";
             position: !lambda return std::to_string(touch.x);
       - lambda: |-
           ESP_LOGI("${TAG_CORE_HW_TOUCH}", "Swipe %s",
-                    (sl_tx_model_format->state == "${TX_MODEL_FORMAT_EU_TEXT}") ? "right" : "up");
+                    (sl_tx_model_format->current_option() == "${TX_MODEL_FORMAT_EU_TEXT}") ? "right" : "up");
           touch_swipe_right->execute();
 
   on_touch_event:
