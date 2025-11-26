@@ -204,7 +204,7 @@ script:
           // Device identification
           ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Device friendly name: ${friendly_name}");
           ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Device name: ${name}");
-          ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Device name (HA): %s", tx_device_name->state.c_str());
+          ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Device name (HA): %s", tx_device_name->current_option.c_str());
           ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Device hostname: %s", App.get_name().c_str());
 
           dump_config_versions->execute();
@@ -220,11 +220,11 @@ script:
 
           // Model configuration
           ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Model format (selected): %s",
-                          sl_tx_model_format->state.c_str());
+                          sl_tx_model_format->current_option.c_str());
           ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Model format (detected): %s",
                           id(is_us_model) ? "US" : "EU");
           ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Gangs (selected): %s",
-                          sl_tx_model_gang->state.c_str());
+                          sl_tx_model_gang->current_option.c_str());
           ESP_LOGCONFIG("${TAG_CORE_COMMON}", "Gangs (detected): %" PRIu8 "-Gang%s",
                           id(gang_count), id(gang_count) > 1 ? "s" : "");
 
