@@ -182,7 +182,7 @@ script:
             - lambda: return sl_tx_model_format->active_index().has_value();
             - lambda: return sl_tx_model_gang->active_index().has_value();
       - lambda: |-
-          id(is_us_model) = (sl_tx_model_format->state == "${TX_MODEL_FORMAT_US_TEXT}");
+          id(is_us_model) = (sl_tx_model_format->current_option() == "${TX_MODEL_FORMAT_US_TEXT}");
           id(gang_count) = sl_tx_model_gang->active_index().value() + 1;
           if (id(gang_count) < 1 || id(gang_count) > 4) {
             ESP_LOGE("${TAG_CORE_COMMON}", "Invalid number of gangs: %" PRIu8, id(gang_count));

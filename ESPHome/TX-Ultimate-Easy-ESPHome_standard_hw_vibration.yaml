@@ -22,7 +22,7 @@ binary_sensor:
     icon: mdi:vibrate
     internal: false
     platform: template
-    lambda: return sw_vibration_motor->state;
+    lambda: return sw_vibration_motor->current_option();
 
 button:
   - id: bt_vibrate
@@ -95,7 +95,7 @@ script:
     mode: restart
     then:
       - lambda: |-
-          if (sl_touch_vibration_feedback->state != "Disabled")
+          if (sl_touch_vibration_feedback->current_option() != "Disabled")
             vibrate->execute();
 
   - id: !extend touch_on_press
@@ -106,7 +106,7 @@ script:
     mode: restart
     then:
       - lambda: |-
-          if (sl_touch_vibration_feedback->state == "On press" or sl_touch_vibration_feedback->state == "Always")
+          if (sl_touch_vibration_feedback->current_option() == "On press" or sl_touch_vibration_feedback->current_option() == "Always")
             vibrate->execute();
 
   - id: !extend touch_on_release
@@ -117,14 +117,14 @@ script:
     mode: restart
     then:
       - lambda: |-
-          if (sl_touch_vibration_feedback->state == "On release" or sl_touch_vibration_feedback->state == "Always")
+          if (sl_touch_vibration_feedback->current_option() == "On release" or sl_touch_vibration_feedback->current_option() == "Always")
             vibrate->execute();
 
   - id: vibrate
     mode: restart
     then:
       - switch.turn_on: sw_vibration_motor
-      - delay: !lambda return nr_vibrating_duration->state;
+      - delay: !lambda return nr_vibrating_duration->current_option();
       - switch.turn_off: sw_vibration_motor
 
 select:

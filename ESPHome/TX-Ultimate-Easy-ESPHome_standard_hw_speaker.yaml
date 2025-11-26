@@ -32,7 +32,7 @@ api:
       then:
         - lambda: |-
             rtttl_speaker->stop();
-            if (speaker_volume->state > 0) {
+            if (speaker_volume->current_option() > 0) {
               ESP_LOGI("${TAG_STD_HW_SPEAKER}", "Play tone: '%s'", tone.c_str());
               rtttl_speaker->play(tone.c_str());
             }
@@ -131,7 +131,7 @@ script:
     mode: restart
     then:
       - lambda: |-
-          if (sl_touch_speaker_feedback->state != "Disabled")
+          if (sl_touch_speaker_feedback->current_option() != "Disabled")
             speaker_play_click->execute();
 
   - id: !extend touch_on_press
@@ -142,7 +142,7 @@ script:
     mode: restart
     then:
       - lambda: |-
-          if (sl_touch_speaker_feedback->state == "On press" or sl_touch_speaker_feedback->state == "Always")
+          if (sl_touch_speaker_feedback->current_option() == "On press" or sl_touch_speaker_feedback->current_option() == "Always")
             speaker_play_click->execute();
 
   - id: !extend touch_on_release
@@ -153,7 +153,7 @@ script:
     mode: restart
     then:
       - lambda: |-
-          if (sl_touch_speaker_feedback->state == "On release" or sl_touch_speaker_feedback->state == "Always")
+          if (sl_touch_speaker_feedback->current_option() == "On release" or sl_touch_speaker_feedback->current_option() == "Always")
             speaker_play_click->execute();
 
 select:
