@@ -38,7 +38,7 @@ media_player:
     internal: false
     platform: speaker
     codec_support_enabled: true
-    buffer_size: 250000
+    buffer_size: 128000
     task_stack_in_psram: false
     announcement_pipeline:
       speaker: announcement_spk_resampling_input
