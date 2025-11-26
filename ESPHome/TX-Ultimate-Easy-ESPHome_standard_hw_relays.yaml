@@ -1011,16 +1011,16 @@ script:
           ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "Relay%s mode%s:", gang_count_plural_suffix.c_str(),
                                                                   gang_count_plural_suffix.c_str());
           ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 1: %s", sl_relay_1_mode->has_state() ?
-                                              sl_relay_1_mode->current_option.c_str() : "Unknown");
+                                              sl_relay_1_mode->current_option().c_str() : "Unknown");
           if (id(gang_count) >= 2)
             ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 2: %s", sl_relay_2_mode->has_state() ?
-                                                sl_relay_2_mode->current_option.c_str() : "Unknown");
+                                                sl_relay_2_mode->current_option().c_str() : "Unknown");
           if (id(gang_count) >= 3)
             ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 3: %s", sl_relay_3_mode->has_state() ?
-                                                sl_relay_3_mode->current_option.c_str() : "Unknown");
+                                                sl_relay_3_mode->current_option().c_str() : "Unknown");
           if (id(gang_count) >= 4)
             ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 4: %s", sl_relay_4_mode->has_state() ?
-                                                sl_relay_4_mode->current_option.c_str() : "Unknown");
+                                                sl_relay_4_mode->current_option().c_str() : "Unknown");
 
           // Relay's states
           ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "Relay%s state%s:", gang_count_plural_suffix.c_str(),
@@ -1048,20 +1048,20 @@ script:
           ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "Relay%s LEDs mode%s:", gang_count_plural_suffix.c_str(),
                                                                         gang_count_plural_suffix.c_str());
           ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 1: %s", id(is_us_model) ?
-                                                                  sl_relay_1_light_mode_us->current_option.c_str() :
-                                                                  sl_relay_1_light_mode_eu->current_option.c_str());
+                                                                  sl_relay_1_light_mode_us->current_option().c_str() :
+                                                                  sl_relay_1_light_mode_eu->current_option().c_str());
           if (id(gang_count) >= 2)
             ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 2: %s", id(is_us_model) ?
-                                                                  sl_relay_2_light_mode_us->current_option.c_str() :
-                                                                  sl_relay_2_light_mode_eu->current_option.c_str());
+                                                                  sl_relay_2_light_mode_us->current_option().c_str() :
+                                                                  sl_relay_2_light_mode_eu->current_option().c_str());
           if (id(gang_count) >= 3)
             ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 3: %s", id(is_us_model) ?
-                                                                  sl_relay_3_light_mode_us->current_option.c_str() :
-                                                                  sl_relay_3_light_mode_eu->current_option.c_str());
+                                                                  sl_relay_3_light_mode_us->current_option().c_str() :
+                                                                  sl_relay_3_light_mode_eu->current_option().c_str());
           if (id(gang_count) >= 4)
             ESP_LOGCONFIG("${TAG_STD_HW_RELAYS}", "  Relay 4: %s", id(is_us_model) ?
-                                                                  sl_relay_4_light_mode_us->current_option.c_str() :
-                                                                  sl_relay_4_light_mode_eu->current_option.c_str());
+                                                                  sl_relay_4_light_mode_us->current_option().c_str() :
+                                                                  sl_relay_4_light_mode_eu->current_option().c_str());
 
   - id: !extend dump_config_list_packages
     then:
