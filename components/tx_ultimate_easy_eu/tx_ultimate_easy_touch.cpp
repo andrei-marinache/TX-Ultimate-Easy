@@ -83,8 +83,6 @@ namespace esphome {
                 static_cast<uint8_t>((position / width) + 1), // Convert position to button index
                 this->gang_count_ // Clamp to max gang count
             );
-            if (button == 3) return 1;
-            if (button == 1) return 3;
             return button;
         }
 
