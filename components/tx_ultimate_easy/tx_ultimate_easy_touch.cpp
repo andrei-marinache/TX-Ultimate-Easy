@@ -25,7 +25,6 @@ namespace esphome {
 
             while (this->available()) {
                 byte = this->read();
-                ESP_LOGI(TAG, "RX BYTE: 0x%02X (%d)", byte, byte);
                 if (byte == HEADER_BYTE_1) {
                     this->handle_touch(uart_received_bytes);
                     i = 0;
