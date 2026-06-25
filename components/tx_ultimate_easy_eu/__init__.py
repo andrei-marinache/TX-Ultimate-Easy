@@ -111,7 +111,7 @@ async def to_code(config):
     await uart.register_uart_device(var, config)
     await register_tx_ultimate_easy(var, config)
 
-    if CORE.using_esp_idf:
+    if CORE.using_toolchain_esp_idf:
         add_idf_sdkconfig_option("CONFIG_BT_ALLOCATION_FROM_SPIRAM_FIRST", True)
         add_idf_sdkconfig_option("CONFIG_BT_BLE_DYNAMIC_ENV_MEMORY", True)
         add_idf_sdkconfig_option("CONFIG_ESP32_REV_MIN_3", True)
