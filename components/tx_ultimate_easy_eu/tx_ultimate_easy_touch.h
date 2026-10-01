@@ -79,6 +79,14 @@ namespace esphome {
 
             uint8_t gang_count_ = 1;
 
+            // Frame being assembled; kept across loop() calls so a frame split
+            // between two UART reads is not dropped.
+            std::array<int, UART_RECEIVED_BYTES_SIZE> frame_{};
+            int frame_len_ = 0;
+            uint32_t frame_last_byte_ms_ = 0;
+            bool frame_spans_loops_ = false;
+            void flush_frame_();
+
         }; // class TxUltimateEasy
 
     } // namespace tx_ultimate_easy

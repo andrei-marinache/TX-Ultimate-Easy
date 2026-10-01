@@ -2,9 +2,11 @@
 
 #ifdef TX_ULTIMATE_EASY_CORE_HW_TOUCH
 
+#include "esphome/core/hal.h"
 #include "esphome/core/log.h"
 #include "tx_ultimate_easy_touch.h"
 #include <cinttypes>
+#include <cstdio>
 #include <string>
 
 namespace esphome {
@@ -17,27 +19,35 @@ namespace esphome {
             ESP_LOGI(TAG, "TX Ultimate Easy is initialized");
         }
 
-        void TxUltimateEasy::loop() {
-            bool found = false;
-            std::array<int, UART_RECEIVED_BYTES_SIZE> uart_received_bytes{};
-            int byte = -1;
-            int i = 0;
+        // A frame is complete when the next header arrives or the line has been idle
+        // this long (one 15-byte frame takes ~1.3 ms at 115200 baud).
+        static const uint32_t FRAME_IDLE_TIMEOUT_MS = 5;
 
+        void TxUltimateEasy::loop() {
+            bool carried = this->frame_len_ > 0;  // partial frame left by a previous loop()
             while (this->available()) {
-                byte = this->read();
-                if (byte == HEADER_BYTE_1) {
-                    this->handle_touch(uart_received_bytes);
-                    i = 0;
+                const int byte = this->read();
+                if (byte == HEADER_BYTE_1 && this->frame_len_ > 0) {
+                    this->flush_frame_();
+                    carried = false;
                 }
-                if (i < UART_RECEIVED_BYTES_SIZE) {
-                    uart_received_bytes[i] = byte;
-                    i++;
-                }
-                if (byte != 0x00) {
-                    found = true;
-                }
+                if (carried)
+                    this->frame_spans_loops_ = true;
+                if (this->frame_len_ < UART_RECEIVED_BYTES_SIZE)
+                    this->frame_[this->frame_len_++] = byte;
+                this->frame_last_byte_ms_ = millis();
             }
-            if (found) this->handle_touch(uart_received_bytes);
+            if (this->frame_len_ > 0 && millis() - this->frame_last_byte_ms_ >= FRAME_IDLE_TIMEOUT_MS)
+                this->flush_frame_();
+        }
+
+        void TxUltimateEasy::flush_frame_() {
+            if (this->frame_spans_loops_)
+                ESP_LOGD(TAG, "Frame assembled across loop() calls (%d bytes)", this->frame_len_);
+            this->handle_touch(this->frame_);
+            this->frame_.fill(0);
+            this->frame_len_ = 0;
+            this->frame_spans_loops_ = false;
         }
 
         void TxUltimateEasy::handle_touch(const std::array<int, UART_RECEIVED_BYTES_SIZE> &uart_received_bytes) {
@@ -47,7 +57,13 @@ namespace esphome {
             for (int i = 0; i < UART_RECEIVED_BYTES_SIZE; i++) {
                 ESP_LOGV(TAG, "UART - Log - Byte[%i]: %i", i, uart_received_bytes[i]);
             }
-            if (this->is_valid_data(uart_received_bytes)) {
+            const bool valid = this->is_valid_data(uart_received_bytes);
+            // Diagnostic: one line per frame, to see whether RELEASE frames arrive, late or malformed
+            char hex[UART_RECEIVED_BYTES_SIZE * 3 + 1];
+            for (int i = 0; i < UART_RECEIVED_BYTES_SIZE; i++)
+                snprintf(hex + i * 3, 4, "%02X ", uart_received_bytes[i] & 0xFF);
+            ESP_LOGI(TAG, "Frame %s%s", hex, valid ? "" : "REJECTED");
+            if (valid) {
                 this->send_touch_(this->get_touch_point(uart_received_bytes));
             }
         }
